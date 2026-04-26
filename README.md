@@ -2,6 +2,10 @@
 
 We train and evaluate CLIP and BLIP to retrieve relevant images and generate meaningful explanations. We evaluate model behavior using appropriate metrics, identify and diagnose failure cases, improve models through fine-tuning strategies, and balance performance with computational cost.
 
+## Dataset
+
+Flickr30K, available on HuggingFace at https://huggingface.co/datasets/nlphuji/flickr30k.
+
 ## CLIP Baseline
 
 Use pretrained CLIP to perform text to image retrieval on the fixed Flick30K test set, and get a baseline result. CLIP is available on HuggingFace at openai/clip-vit-base-patch32. 
@@ -22,7 +26,7 @@ We provide at least 3 correct and 3 failure examples.
 
 ## BLIP Baseline
 
-We then use BLIP to generate captions for test images, and compare generated captions with ground-truth captions.
+We then use BLIP to generate captions for test images, and compare generated captions with ground-truth captions. BLIP is available on HuggingFace at Salesforce/blip-image-captioning-base.
 
 | Method | BLEU-4  | ROUGE-L | METEOR | BERTScore |
 | --- | --- | --- | --- | --- |
