@@ -1,6 +1,6 @@
 # Multimodal Retrieval: Using Flickr30K to Fine-Tune CLIP and BLIP
 
-We train and evaluate CLIP and BLIP orchestrations to retrieve relevant information and generate meaningful explanations for images. We evaluate model behavior using appropriate metrics, identify and diagnose failure cases, improve models through fine-tuning strategies, and balance performance with computational cost.
+We train and evaluate CLIP and BLIP to retrieve relevant images and generate meaningful explanations. We evaluate model behavior using appropriate metrics, identify and diagnose failure cases, improve models through fine-tuning strategies, and balance performance with computational cost.
 
 ## CLIP Baseline
 
