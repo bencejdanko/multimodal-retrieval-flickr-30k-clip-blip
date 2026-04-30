@@ -16,7 +16,7 @@ Use pretrained CLIP to perform text to image retrieval on the fixed Flick30K tes
 
 | Method | Recall@1 | Recall@5 | MRR | Observation |
 | --- | --- | --- | --- | --- |
-| Baseline | 21.77% | 41.60% | 0.3155 | |
+| Baseline | 21.77% | 41.60% | 0.3155 | Qualitatively, the model performs decently. However, these scores indicate that the model cannot recall precisely the same image from Flickr30k, only 1/5th of the time. When we give 5 recall allowance, it's 2/5. $0.33$ MRR indicates that we average the correct image every 3rd rank. The dataset is slightly noisy, with some captions being ambiguous and up to interpretation, and some being descriptive, but not matching the caption, which would also cause some level of error. |
 
 ### Success Cases
 
@@ -77,13 +77,13 @@ We then use BLIP to generate captions for test images, and compare generated cap
 
 We provide 3 correct and 3 failure examples.
 
-| Query | Generated Caption | Ground Truth Caption | Match Quality  | Key Issue |
-| --- | --- | --- | --- | --- |
-| A child playing with a dog in a park | a woman laying on the grass | | | |
-| A person cooking food in a kitchen | a man in a kitchen | | | |
-| A group of people hiking in the mountains | a clear blue sky | | | |
-| A street scene with cars and pedestrians at night | a group of people walking down a street at night | | | |
-| A person working on a laptop in a coffee shop | a woman sitting on a chair | | | |
+| Query | CLIP Retrieval | Generated Caption | Ground Truth Caption | Match Quality / Relevance (1-5) | Key Issue |
+| --- | --- | --- | --- | --- | --- |
+| A child playing with a dog in a park | <img width="484" height="414" alt="image" src="https://github.com/user-attachments/assets/0e419731-89ae-4fc7-b114-cc95d5856c60" /> | a woman laying on the grass | Ground Truth for Index 29364: Person in black shirt lying on top of person in red shirt in the grass. , A girl and a boy in a park kissing in the grass on a sunny day , Two people are laying down and kissing on a grassy lawn. , A young boy and girl cuddle in a grassy field. , A boy lays on top of a girl in a field. | 2/5 - The caption is quite non-descriptive - there is not just a woman, but she is laying down with somebody. The scene described is quite non descriptive | Non-descriptive / Missing key information |
+| A person cooking food in a kitchen | <img width="471" height="527" alt="image" src="https://github.com/user-attachments/assets/41dc76d8-5431-4649-be39-ae8c9b8b09e7" /> | a man in a kitchen | Ground Truth for Index 1562: A chef busily attending to several flaming pots on burners. , A man cooking with fire in like 5 pots at the same time! , Fire is flaming in the skillet of a man in a white coat. , A chef is cooking multiple dishes at the same time. , A man cooking over high flames. | 4/5 - the caption is correct, but non descriptive of the persons or kitchen scene. | Non-descriptive |
+| A group of people hiking in the mountains | <img width="429" height="527" alt="image" src="https://github.com/user-attachments/assets/2ea98a8e-5e96-4996-84d3-33dfac7c1a20" /> | a clear blue sky | Ground Truth for Index 22865: Two women wearing jeans and a man wearing shorts walking up a gravel mountain road carrying backpacks. , Three people are walking up a mountain trail, while one woman is looking at her camera. , Three people are hiking down a long gravel trail with scenic green hills behind them. , Three people, with backpacks hiking along a dirt road through the mountains. , Three hikers a traversing a trail as a young lady inspects her camera. | 4/5 - the caption is accurate, a group of people hiking in the mountains, but it's not very descriptive | Non-descriptive |
+| A street scene with cars and pedestrians at night | <img width="441" height="569" alt="image" src="https://github.com/user-attachments/assets/bb267f0d-29c6-41a0-a322-a9dd1ebc16e4" /> | a group of people walking down a street at night | Ground Truth for Index 24600: An older couple walks a narrow, crowded street under orange sodium vapor lamps at night. , An elderly couple is walking through a city block, holding hands. , A man and a woman in a crowd of people on a street at night. , An older couple is walking down the street. , People walking along on a street at night. | 4/5 - Accurate, it describes the subject, location and time, but could use more descriptive alignment like the ground truth | Non-descriptive |
+| A person working on a laptop in a coffee shop | <img width="484" height="376" alt="image" src="https://github.com/user-attachments/assets/3b4dbde4-0a0f-4fb2-8992-171d1f84f474" /> | a woman sitting on a chair | Ground Truth for Index 25188: A woman with blond-hair is sitting in a booth with a drink working on her laptop. , As I slave over this assignment, I cautiously click on the answer! , A woman working on her computer in front of a bright yellow wall. , Woman sitting at a table while working on her laptop computer. , A woman in a white shirt working on her laptop. | 3/5 - Technically correct, but is missing the "working" subject or mention of the laptop, or location | Non-descriptive, too general |
 
 ## CLIP Fine-Tuning
 
