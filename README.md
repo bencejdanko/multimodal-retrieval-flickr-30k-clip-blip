@@ -43,7 +43,6 @@ Use pretrained CLIP to perform text to image retrieval on the fixed Flick30K tes
 > Some images simply had mismatching queries, which also resulted in failed queries.
 > Obviously mismatched or misannotated results were omited
 
-
 ### Fixed Query Observation
 
 | Query (Caption) | Top-5 Images |
@@ -85,7 +84,16 @@ We provide 3 correct and 3 failure examples.
 | A street scene with cars and pedestrians at night | <img width="441" height="569" alt="image" src="https://github.com/user-attachments/assets/bb267f0d-29c6-41a0-a322-a9dd1ebc16e4" /> | a group of people walking down a street at night | Ground Truth for Index 24600: An older couple walks a narrow, crowded street under orange sodium vapor lamps at night. , An elderly couple is walking through a city block, holding hands. , A man and a woman in a crowd of people on a street at night. , An older couple is walking down the street. , People walking along on a street at night. | 4/5 - Accurate, it describes the subject, location and time, but could use more descriptive alignment like the ground truth | Non-descriptive |
 | A person working on a laptop in a coffee shop | <img width="484" height="376" alt="image" src="https://github.com/user-attachments/assets/3b4dbde4-0a0f-4fb2-8992-171d1f84f474" /> | a woman sitting on a chair | Ground Truth for Index 25188: A woman with blond-hair is sitting in a booth with a drink working on her laptop. , As I slave over this assignment, I cautiously click on the answer! , A woman working on her computer in front of a bright yellow wall. , Woman sitting at a table while working on her laptop computer. , A woman in a white shirt working on her laptop. | 3/5 - Technically correct, but is missing the "working" subject or mention of the laptop, or location | Non-descriptive, too general |
 
-## CLIP Fine-Tuning
+## Fine-tuning
+
+We employ 4 methods to increase performance on our dataset:
+
+- **Linear Probe**: Training only the projection heads while keeping the backbones frozen.
+- **Partial Fine-tune**: Unfreezing and training only the last few layers of the encoders.
+- **LoRA**: Using Low-Rank Adaptation (PEFT) to fine-tune the model efficiently.
+- **Full Fine-tune**: Unfreezing the entire model for comprehensive training.
+
+### CLIP Fine-Tuning Results
 
 | Method | Recall@1 | Recall@5 | MRR | Observation |
 | --- | --- | --- | --- | --- |
@@ -95,7 +103,7 @@ We provide 3 correct and 3 failure examples.
 | LoRA | | | |
 | Full Fine-tune | | | |
 
-## BLIP Results
+### BLIP Fine-tuning Results
 
 | Method | BLEU-4  | ROUGE-L | METEOR | BERTScore |
 | --- | --- | --- | --- | --- |
