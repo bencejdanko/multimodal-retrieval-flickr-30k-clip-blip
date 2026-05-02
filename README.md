@@ -86,18 +86,72 @@ We provide 3 correct and 3 failure examples.
 
 ## Fine-tuning
 
-We employ 4 methods to increase performance on our dataset:
+We employ 4 methods to increase performance on our dataset.
 
-- **Linear Probe**: Training only the projection heads while keeping the backbones frozen.
-- **Partial Fine-tune**: Unfreezing and training only the last few layers of the encoders.
-- **LoRA**: Using Low-Rank Adaptation (PEFT) to fine-tune the model efficiently.
-- **Full Fine-tune**: Unfreezing the entire model for comprehensive training.
+### Linear Probe
+
+Training only a newly initialized projection head while keeping the backbones frozen. We freeze the feature extractor so its weights cannot change. This is fast, requires very little memory, and is meant to prevent catastrophic forgetting.
+
+| Hyperparameter | Value |
+| --- | --- |
+| Batch Size | 32 |
+| Optimizer | AdamW |
+| Learning rate scheduler | Linear |
+| Loss | Contrastive Loss |
+| Epochs | 1 |
+| Learning rate | 1e-4 |
+| Embedding dimension | 512 |
+
+### Partial Fine-tune
+
+We freeze the early layers and only unfreezes the last few layers of the network alongside the projection heads. This is meant to be an order higher in tuning complexity then a simple linear probe and more allow for more detailed tuning.
+
+| Hyperparameter | Value |
+| --- | --- |
+| Batch Size | 32 |
+| Optimizer | AdamW |
+| Learning rate scheduler | Linear |
+| Loss | Contrastive Loss |
+| Epochs | 1 |
+| Learning rate | 5e-5 |
+
+We unfreeze and train the visual projection, text projection, logit scale, and the final transformer block (layer -1) of both the vision and text encoders.
+
+### LoRA
+
+Using Low-Rank Adaptation freezes the entire model and injects tiny, trainable adapter matrices into the attention layers. This allows training a much tinier subset of parameters and reaches similar performance to a full fine tune quickly.
+
+| Hyperparameter | Value |
+| --- | --- |
+| Batch Size | 32 |
+| Optimizer | AdamW |
+| Learning rate scheduler | Linear |
+| Loss | Contrastive Loss |
+| Epochs | 1 |
+| Learning rate | 5e-5 |
+| Rank | 16 |
+| Alpha | 16 |
+| Dropout | 0.1 |
+| Bias | None |
+
+### Full Fine-tune
+
+Unfreezing and continuing training for the entire model.
+
+| Hyperparameter | Value |
+| --- | --- |
+| Batch Size | 32 |
+| Optimizer | AdamW |
+| Learning rate scheduler | Linear |
+| Loss | Contrastive Loss |
+| Epochs | 1 |
+| Learning rate | 5e-6 |
 
 ### CLIP Fine-Tuning Results
 
 | Method | Recall@1 | Recall@5 | MRR | Observation |
 | --- | --- | --- | --- | --- |
-| Baseline | | | | |
+| Baseline | 21.77% | 41.60% | 0.3155 | Qualitatively, the model performs decently. However, these scores indicate that the model cannot recall precisely the same image from Flickr30k, only 1/5th of the time. When we give 5 recall allowance, it's 2/5. $0.33$ MRR indicates that we average the correct image every 3rd rank. The dataset is slightly noisy, with some captions being ambiguous and up to interpretation, and some being descriptive, but not matching the caption, which would also cause some level of error. |
 | Linear Probe | | | |
 | Partial Fine-tune | | | |
 | LoRA | | | |
