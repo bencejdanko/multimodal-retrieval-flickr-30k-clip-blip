@@ -94,11 +94,11 @@ Training only a newly initialized projection head while keeping the backbones fr
 
 | Hyperparameter | Value |
 | --- | --- |
-| Batch Size | 32 |
+| Batch Size | 1024 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
 | Loss | Contrastive Loss |
-| Epochs | 1 |
+| Epochs | 10 |
 | Learning rate | 1e-4 |
 | Embedding dimension | 512 |
 
@@ -152,7 +152,7 @@ Unfreezing and continuing training for the entire model.
 | Method | Recall@1 | Recall@5 | MRR | Observation |
 | --- | --- | --- | --- | --- |
 | Baseline | 21.77% | 41.60% | 0.3155 | Qualitatively, the model performs decently. However, these scores indicate that the model cannot recall precisely the same image from Flickr30k, only 1/5th of the time. When we give 5 recall allowance, it's 2/5. $0.33$ MRR indicates that we average the correct image every 3rd rank. The dataset is slightly noisy, with some captions being ambiguous and up to interpretation, and some being descriptive, but not matching the caption, which would also cause some level of error. |
-| Linear Probe | | | |
+| Linear Probe | 50.08 | 79.28 | 0.6321 | |
 | Partial Fine-tune | | | |
 | LoRA | | | |
 | Full Fine-tune | | | |
