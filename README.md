@@ -110,18 +110,22 @@ The Epoch Loss shows smooth exponential decay, indicating that the linear head i
 
 ### Partial Fine-tune
 
-We freeze the early layers and only unfreezes the last few layers of the network alongside the projection heads. This is meant to be an order higher in tuning complexity then a simple linear probe and more allow for more detailed tuning.
+The final model is available at [bdanko/clip-flickr30k-partial-finetune](https://huggingface.co/bdanko/clip-flickr30k-partial-finetune).
+
+We unfreeze and train the visual projection, text projection, logit scale, and the final transformer block (layer -1) of both the vision and text encoders.
 
 | Hyperparameter | Value |
 | --- | --- |
-| Batch Size | 32 |
+| Batch Size | 2048 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
 | Loss | Contrastive Loss |
-| Epochs | 1 |
+| Epochs | 5 |
 | Learning rate | 5e-5 |
 
-We unfreeze and train the visual projection, text projection, logit scale, and the final transformer block (layer -1) of both the vision and text encoders.
+<img width="846" height="470" alt="image" src="https://github.com/user-attachments/assets/75e6f890-2487-472c-9ec8-10c65356a5d1" />
+
+We see exponential decay in the loss 
 
 ### LoRA
 
@@ -129,11 +133,11 @@ Using Low-Rank Adaptation freezes the entire model and injects tiny, trainable a
 
 | Hyperparameter | Value |
 | --- | --- |
-| Batch Size | 32 |
+| Batch Size | 128 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
 | Loss | Contrastive Loss |
-| Epochs | 1 |
+| Epochs | 5 |
 | Learning rate | 5e-5 |
 | Rank | 16 |
 | Alpha | 16 |
@@ -159,7 +163,7 @@ Unfreezing and continuing training for the entire model.
 | --- | --- | --- | --- | --- |
 | Baseline | 21.77% | 41.60% | 0.3155 | Qualitatively, the model performs decently. However, these scores indicate that the model cannot recall precisely the same image from Flickr30k, only 1/5th of the time. When we give 5 recall allowance, it's 2/5. $0.33$ MRR indicates that we average the correct image every 3rd rank. The dataset is slightly noisy, with some captions being ambiguous and up to interpretation, and some being descriptive, but not matching the caption, which would also cause some level of error. |
 | Linear Probe | 39.92 | 70.56 | 0.5368 | |
-| Partial Fine-tune | | | |
+| Partial Fine-tune | 72.48 | 92.0 | 0.8101 | |
 | LoRA | | | |
 | Full Fine-tune | | | |
 
