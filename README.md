@@ -84,7 +84,7 @@ We provide 3 correct and 3 failure examples.
 | A street scene with cars and pedestrians at night | <img width="441" height="569" alt="image" src="https://github.com/user-attachments/assets/bb267f0d-29c6-41a0-a322-a9dd1ebc16e4" /> | a group of people walking down a street at night | Ground Truth for Index 24600: An older couple walks a narrow, crowded street under orange sodium vapor lamps at night. , An elderly couple is walking through a city block, holding hands. , A man and a woman in a crowd of people on a street at night. , An older couple is walking down the street. , People walking along on a street at night. | 4/5 - Accurate, it describes the subject, location and time, but could use more descriptive alignment like the ground truth | Non-descriptive |
 | A person working on a laptop in a coffee shop | <img width="484" height="376" alt="image" src="https://github.com/user-attachments/assets/3b4dbde4-0a0f-4fb2-8992-171d1f84f474" /> | a woman sitting on a chair | Ground Truth for Index 25188: A woman with blond-hair is sitting in a booth with a drink working on her laptop. , As I slave over this assignment, I cautiously click on the answer! , A woman working on her computer in front of a bright yellow wall. , Woman sitting at a table while working on her laptop computer. , A woman in a white shirt working on her laptop. | 3/5 - Technically correct, but is missing the "working" subject or mention of the laptop, or location | Non-descriptive, too general |
 
-## Fine-tuning
+## CLIP Fine-tuning
 
 We employ 4 methods to increase performance on our dataset.
 
@@ -94,7 +94,7 @@ Training only a newly initialized projection head while keeping the backbones fr
 
 | Hyperparameter | Value |
 | --- | --- |
-| Batch Size | 1024 |
+| Batch Size | 2048 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
 | Loss | Contrastive Loss |
@@ -156,6 +156,69 @@ Unfreezing and continuing training for the entire model.
 | Partial Fine-tune | | | |
 | LoRA | | | |
 | Full Fine-tune | | | |
+
+## BLIP Fine Tuning
+
+We similarly ablate several BLIP fine tuning strategies.
+
+### Linear Probe
+
+Training only a newly initialized projection head while keeping the backbones frozen. We freeze the feature extractor so its weights cannot change. This is fast, requires very little memory, and is meant to prevent catastrophic forgetting.
+
+| Hyperparameter | Value |
+| --- | --- |
+| Batch Size | 2024 |
+| Optimizer | AdamW |
+| Learning rate scheduler | Linear |
+| Loss | Contrastive Loss |
+| Epochs | 10 |
+| Learning rate | 1e-4 |
+| Embedding dimension | 512 |
+
+### Partial Fine-tune
+
+We freeze the early layers and only unfreezes the last few layers of the network alongside the projection heads. This is meant to be an order higher in tuning complexity then a simple linear probe and more allow for more detailed tuning.
+
+| Hyperparameter | Value |
+| --- | --- |
+| Batch Size | 32 |
+| Optimizer | AdamW |
+| Learning rate scheduler | Linear |
+| Loss | Contrastive Loss |
+| Epochs | 1 |
+| Learning rate | 5e-5 |
+
+We unfreeze and train the visual projection, text projection, logit scale, and the final transformer block (layer -1) of both the vision and text encoders.
+
+### LoRA
+
+Using Low-Rank Adaptation freezes the entire model and injects tiny, trainable adapter matrices into the attention layers. This allows training a much tinier subset of parameters and reaches similar performance to a full fine tune quickly.
+
+| Hyperparameter | Value |
+| --- | --- |
+| Batch Size | 32 |
+| Optimizer | AdamW |
+| Learning rate scheduler | Linear |
+| Loss | Contrastive Loss |
+| Epochs | 1 |
+| Learning rate | 5e-5 |
+| Rank | 16 |
+| Alpha | 16 |
+| Dropout | 0.1 |
+| Bias | None |
+
+### Full Fine-tune
+
+Unfreezing and continuing training for the entire model.
+
+| Hyperparameter | Value |
+| --- | --- |
+| Batch Size | 32 |
+| Optimizer | AdamW |
+| Learning rate scheduler | Linear |
+| Loss | Contrastive Loss |
+| Epochs | 1 |
+| Learning rate | 5e-6 |
 
 ### BLIP Fine-tuning Results
 
