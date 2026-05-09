@@ -90,6 +90,8 @@ We employ 4 methods to increase performance on our dataset.
 
 ### Linear Probe
 
+The final model is available at [bdanko/clip-flickr30k-linear-probe-finetune](https://huggingface.co/bdanko/clip-flickr30k-linear-probe-finetune).
+
 Training only a newly initialized projection head while keeping the backbones frozen. We freeze the feature extractor so its weights cannot change. This is fast, requires very little memory, and is meant to prevent catastrophic forgetting.
 
 | Hyperparameter | Value |
@@ -261,6 +263,10 @@ We will design a full orchestrated system where:
 ### CLIP Linear Probe Training
 
 <img width="646" height="461" alt="image" src="https://github.com/user-attachments/assets/f8ddd125-2863-4232-84e6-0f9d02fbcb4b" />
+
+### CLIP Partial Fine Tuning
+
+<img width="655" height="161" alt="image" src="https://github.com/user-attachments/assets/549440d3-0d9c-4056-9050-21f87d54119c" />
 
 ### BLIP Probe Training
 
