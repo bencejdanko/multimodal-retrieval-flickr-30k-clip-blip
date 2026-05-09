@@ -102,6 +102,10 @@ Training only a newly initialized projection head while keeping the backbones fr
 | Learning rate | 1e-4 |
 | Embedding dimension | 512 |
 
+<img width="833" height="470" alt="image" src="https://github.com/user-attachments/assets/300318a5-b736-4815-90b8-17fa0d3cd1c5" />
+
+The Epoch Loss shows smooth exponential decay, indicating that the linear head is successfully learning to map the frozen backbone's features to the target labels. Towards the end of the 150 steps, the slope of the red line becomes very shallow, suggesting the linear probe is reaching its maximum capacity given the frozen features of the base model. The sharp points in the steps may have been from the last step batches not being the same divisible as the other steps.
+
 ### Partial Fine-tune
 
 We freeze the early layers and only unfreezes the last few layers of the network alongside the projection heads. This is meant to be an order higher in tuning complexity then a simple linear probe and more allow for more detailed tuning.
@@ -152,7 +156,7 @@ Unfreezing and continuing training for the entire model.
 | Method | Recall@1 | Recall@5 | MRR | Observation |
 | --- | --- | --- | --- | --- |
 | Baseline | 21.77% | 41.60% | 0.3155 | Qualitatively, the model performs decently. However, these scores indicate that the model cannot recall precisely the same image from Flickr30k, only 1/5th of the time. When we give 5 recall allowance, it's 2/5. $0.33$ MRR indicates that we average the correct image every 3rd rank. The dataset is slightly noisy, with some captions being ambiguous and up to interpretation, and some being descriptive, but not matching the caption, which would also cause some level of error. |
-| Linear Probe | 50.08 | 79.28 | 0.6321 | |
+| Linear Probe | 39.92 | 70.56 | 0.5368 | |
 | Partial Fine-tune | | | |
 | LoRA | | | |
 | Full Fine-tune | | | |
