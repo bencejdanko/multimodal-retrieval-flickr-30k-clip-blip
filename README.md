@@ -12,7 +12,7 @@ Use pretrained CLIP to perform text to image retrieval on the fixed Flick30K tes
 
 | Architecture | Precision |
 | --- | --- |
-| openai/clip-vit-base-patch32 | 16fp |
+| openai/clip-vit-base-patch32 | 16 FP |
 
 | Method | Recall@1 | Recall@5 | MRR | Observation |
 | --- | --- | --- | --- | --- |
@@ -96,6 +96,7 @@ Training only a newly initialized projection head while keeping the backbones fr
 
 | Hyperparameter | Value |
 | --- | --- |
+| Precision | 32FP |
 | Batch Size | 2048 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
@@ -116,6 +117,7 @@ We unfreeze and train the visual projection, text projection, logit scale, and t
 
 | Hyperparameter | Value |
 | --- | --- |
+| Precision | 32FP |
 | Batch Size | 2048 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
@@ -133,6 +135,7 @@ Using Low-Rank Adaptation freezes the entire model and injects tiny, trainable a
 
 | Hyperparameter | Value |
 | --- | --- |
+| Precision | 32FP |
 | Batch Size | 128 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
@@ -144,18 +147,21 @@ Using Low-Rank Adaptation freezes the entire model and injects tiny, trainable a
 | Dropout | 0.1 |
 | Bias | None |
 
+<img width="846" height="470" alt="image" src="https://github.com/user-attachments/assets/229646c5-ea40-4759-9b4b-5f2259e1384d" />
+
 ### Full Fine-tune
 
 Unfreezing and continuing training for the entire model.
 
 | Hyperparameter | Value |
 | --- | --- |
+| Precision | 32FP |
 | Batch Size | 32 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
 | Loss | Contrastive Loss |
 | Epochs | 1 |
-| Learning rate | 5e-6 |
+| Learning rate | 5e-5 |
 
 ### CLIP Fine-Tuning Results
 
@@ -164,7 +170,7 @@ Unfreezing and continuing training for the entire model.
 | Baseline | 21.77% | 41.60% | 0.3155 | Qualitatively, the model performs decently. However, these scores indicate that the model cannot recall precisely the same image from Flickr30k, only 1/5th of the time. When we give 5 recall allowance, it's 2/5. $0.33$ MRR indicates that we average the correct image every 3rd rank. The dataset is slightly noisy, with some captions being ambiguous and up to interpretation, and some being descriptive, but not matching the caption, which would also cause some level of error. |
 | Linear Probe | 39.92 | 70.56 | 0.5368 | |
 | Partial Fine-tune | 72.48 | 92.0 | 0.8101 | |
-| LoRA | | | |
+| LoRA | 72.04 | 92.16 | 0.8089 |
 | Full Fine-tune | | | |
 
 ## BLIP Fine Tuning
@@ -177,6 +183,7 @@ Frozen BLIP backbone with only decoder-side output components trainable.
 
 | Hyperparameter | Value |
 | --- | --- |
+| Precision | 16BF |
 | Batch Size | 512 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
@@ -185,12 +192,15 @@ Frozen BLIP backbone with only decoder-side output components trainable.
 | Learning rate | 1e-4 |
 | Embedding dimension | 512 |
 
+<img width="846" height="470" alt="image" src="https://github.com/user-attachments/assets/b51b9eb1-1f19-4e06-b831-5914d80f22d5" />
+
 ### Partial Fine-tune
 
 We freeze the early layers and only unfreezes the last few layers of the network alongside the projection heads. This is meant to be an order higher in tuning complexity then a simple linear probe and more allow for more detailed tuning.
 
 | Hyperparameter | Value |
 | --- | --- |
+| Precision | 16BF |
 | Batch Size | 32 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
@@ -206,6 +216,7 @@ Using Low-Rank Adaptation freezes the entire model and injects tiny, trainable a
 
 | Hyperparameter | Value |
 | --- | --- |
+| Precision | 16BF |
 | Batch Size | 32 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
@@ -223,6 +234,7 @@ Unfreezing and continuing training for the entire model.
 
 | Hyperparameter | Value |
 | --- | --- |
+| Precision | 16BF |
 | Batch Size | 32 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
@@ -234,8 +246,8 @@ Unfreezing and continuing training for the entire model.
 
 | Method | BLEU-4  | ROUGE-L | METEOR | BERTScore |
 | --- | --- | --- | --- | --- |
-| Baseline | | | | |
-| Linear Probe | | | | |
+| Baseline | 0.1975 | 0.4708 | 0.3233 | 0.9251 |
+| Linear Probe | 0.2651 | 0.3151 | 0.25 | 0.9079 |
 | Partial Fine-tune | | | | |
 | LoRA | | | | |
 | Full Fine-tune | | | | |
@@ -272,8 +284,20 @@ We will design a full orchestrated system where:
 
 <img width="655" height="161" alt="image" src="https://github.com/user-attachments/assets/549440d3-0d9c-4056-9050-21f87d54119c" />
 
+### CLIP LoRA Training
+
+<img width="649" height="179" alt="image" src="https://github.com/user-attachments/assets/de7b0b3d-e93c-4f55-8f56-b74a1e4a5956" />
+
+### CLIP Full Parameter Training
+
+<img width="656" height="244" alt="image" src="https://github.com/user-attachments/assets/babdcef5-b2c7-4a20-9535-561cc3ff437f" />
+
 ### BLIP Probe Training
 
-<img width="637" height="367" alt="image" src="https://github.com/user-attachments/assets/900bc2b3-c92e-4fcf-8a05-8de99d644da4" />
+<img width="659" height="344" alt="image" src="https://github.com/user-attachments/assets/6fc86ec1-5181-4925-9536-5726e9cf528c" />
+
+### BLIP Partial Fine Tuning
+
+<img width="632" height="458" alt="image" src="https://github.com/user-attachments/assets/a83073a1-6e39-45fb-8eee-0b7a17d9b653" />
 
 
