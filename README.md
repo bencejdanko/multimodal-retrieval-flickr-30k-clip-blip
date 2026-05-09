@@ -163,7 +163,7 @@ We similarly ablate several BLIP fine tuning strategies.
 
 ### Linear Probe
 
-Training only a newly initialized projection head while keeping the backbones frozen. We freeze the feature extractor so its weights cannot change. This is fast, requires very little memory, and is meant to prevent catastrophic forgetting.
+Frozen BLIP backbone with only decoder-side output components trainable.
 
 | Hyperparameter | Value |
 | --- | --- |
