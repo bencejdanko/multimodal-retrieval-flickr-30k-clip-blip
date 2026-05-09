@@ -167,10 +167,10 @@ Frozen BLIP backbone with only decoder-side output components trainable.
 
 | Hyperparameter | Value |
 | --- | --- |
-| Batch Size | 2024 |
+| Batch Size | 512 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
-| Loss | Contrastive Loss |
+| Loss | Caption CE Loss |
 | Epochs | 10 |
 | Learning rate | 1e-4 |
 | Embedding dimension | 512 |
@@ -184,7 +184,7 @@ We freeze the early layers and only unfreezes the last few layers of the network
 | Batch Size | 32 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
-| Loss | Contrastive Loss |
+| Loss | Caption CE Loss |
 | Epochs | 1 |
 | Learning rate | 5e-5 |
 
@@ -199,7 +199,7 @@ Using Low-Rank Adaptation freezes the entire model and injects tiny, trainable a
 | Batch Size | 32 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
-| Loss | Contrastive Loss |
+| Loss | Caption CE Loss |
 | Epochs | 1 |
 | Learning rate | 5e-5 |
 | Rank | 16 |
@@ -216,7 +216,7 @@ Unfreezing and continuing training for the entire model.
 | Batch Size | 32 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
-| Loss | Contrastive Loss |
+| Loss | Caption CE Loss |
 | Epochs | 1 |
 | Learning rate | 5e-6 |
 
@@ -251,3 +251,15 @@ We will design a full orchestrated system where:
 | A group of people hiking in the mountains | | | | | |
 | A street scene with cars and pedestrians at night | | | | | |
 | A person working on a laptop in a coffee shop | | | | | |
+
+## Artifacts
+
+### CLIP Linear Probe Training
+
+<img width="646" height="461" alt="image" src="https://github.com/user-attachments/assets/f8ddd125-2863-4232-84e6-0f9d02fbcb4b" />
+
+### BLIP Probe Training
+
+<img width="637" height="367" alt="image" src="https://github.com/user-attachments/assets/900bc2b3-c92e-4fcf-8a05-8de99d644da4" />
+
+
