@@ -151,17 +151,21 @@ Using Low-Rank Adaptation freezes the entire model and injects tiny, trainable a
 
 ### Full Fine-tune
 
+You can find the model on Huggingface at [bdanko/clip-flickr30k-full-finetune](https://huggingface.co/bdanko/clip-flickr30k-full-finetune).
+
 Unfreezing and continuing training for the entire model.
 
 | Hyperparameter | Value |
 | --- | --- |
 | Precision | 32FP |
-| Batch Size | 32 |
+| Batch Size | 128 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
 | Loss | Contrastive Loss |
-| Epochs | 1 |
+| Epochs | 5 |
 | Learning rate | 5e-5 |
+
+<img width="846" height="470" alt="image" src="https://github.com/user-attachments/assets/f560c9d7-7fbc-4e99-bf4d-fb95007a5f99" />
 
 ### CLIP Fine-Tuning Results
 
@@ -170,14 +174,16 @@ Unfreezing and continuing training for the entire model.
 | Baseline | 21.77% | 41.60% | 0.3155 | Qualitatively, the model performs decently. However, these scores indicate that the model cannot recall precisely the same image from Flickr30k, only 1/5th of the time. When we give 5 recall allowance, it's 2/5. $0.33$ MRR indicates that we average the correct image every 3rd rank. The dataset is slightly noisy, with some captions being ambiguous and up to interpretation, and some being descriptive, but not matching the caption, which would also cause some level of error. |
 | Linear Probe | 39.92 | 70.56 | 0.5368 | |
 | Partial Fine-tune | 72.48 | 92.0 | 0.8101 | |
-| LoRA | 72.04 | 92.16 | 0.8089 |
-| Full Fine-tune | | | |
+| LoRA | 72.04 | 92.16 | 0.8089 | |
+| Full Fine-tune | 66.66 | 89.58 | 0.7677 | |
 
 ## BLIP Fine Tuning
 
 We similarly ablate several BLIP fine tuning strategies.
 
 ### Linear Probe
+
+You can find the model on Huggingface at [bdanko/blip-flickr30k-probe](https://huggingface.co/bdanko/blip-flickr30k-probe).
 
 Frozen BLIP backbone with only decoder-side output components trainable.
 
@@ -196,6 +202,8 @@ Frozen BLIP backbone with only decoder-side output components trainable.
 
 ### Partial Fine-tune
 
+You can find the model at [bdanko/blip-flickr30k-partial-finetune](https://huggingface.co/bdanko/blip-flickr30k-partial-finetune) on Huggingface.
+
 We freeze the early layers and only unfreezes the last few layers of the network alongside the projection heads. This is meant to be an order higher in tuning complexity then a simple linear probe and more allow for more detailed tuning.
 
 | Hyperparameter | Value |
@@ -208,7 +216,7 @@ We freeze the early layers and only unfreezes the last few layers of the network
 | Epochs | 1 |
 | Learning rate | 5e-5 |
 
-We unfreeze and train the visual projection, text projection, logit scale, and the final transformer block (layer -1) of both the vision and text encoders.
+<img width="846" height="470" alt="image" src="https://github.com/user-attachments/assets/66378256-924a-49a5-b8e7-2c3cf874df0e" />
 
 ### LoRA
 
@@ -217,11 +225,11 @@ Using Low-Rank Adaptation freezes the entire model and injects tiny, trainable a
 | Hyperparameter | Value |
 | --- | --- |
 | Precision | 16BF |
-| Batch Size | 32 |
+| Batch Size | 64 |
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
 | Loss | Caption CE Loss |
-| Epochs | 1 |
+| Epochs | 5 |
 | Learning rate | 5e-5 |
 | Rank | 16 |
 | Alpha | 16 |
@@ -248,7 +256,7 @@ Unfreezing and continuing training for the entire model.
 | --- | --- | --- | --- | --- |
 | Baseline | 0.1975 | 0.4708 | 0.3233 | 0.9251 |
 | Linear Probe | 0.2651 | 0.3151 | 0.25 | 0.9079 |
-| Partial Fine-tune | | | | |
+| Partial Fine-tune | 0.2693 | 0.3232 | 0.2647 | 0.9093 |
 | LoRA | | | | |
 | Full Fine-tune | | | | |
 
@@ -299,5 +307,10 @@ We will design a full orchestrated system where:
 ### BLIP Partial Fine Tuning
 
 <img width="632" height="458" alt="image" src="https://github.com/user-attachments/assets/a83073a1-6e39-45fb-8eee-0b7a17d9b653" />
+
+### BLIP LoRA Training
+
+<img width="606" height="275" alt="image" src="https://github.com/user-attachments/assets/f4d870f9-f6cd-464f-8e3e-e3c6e4175348" />
+
 
 
