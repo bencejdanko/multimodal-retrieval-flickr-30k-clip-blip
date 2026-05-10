@@ -212,7 +212,14 @@ Frozen BLIP backbone with only decoder-side output components trainable.
 
 You can find the model at [bdanko/blip-flickr30k-partial-finetune](https://huggingface.co/bdanko/blip-flickr30k-partial-finetune) on Huggingface.
 
-We freeze the early layers, and only unfreezes the last few layers of the network alongside the projection heads.
+Unfreeze and train:
+
+- The classifier
+- The LM head
+- The last text decoder layer
+- The last vision encoder layer
+
+layers of the network alongside the projection heads.
 
 | Hyperparameter | Value |
 | --- | --- |
@@ -287,6 +294,8 @@ We will design a full orchestrated system where:
 1. We retrieve the top-3 images using CLIP 
 2. Generate a caption for each image using BLIP 
 3. Provide a 2–3 sentence explanation justifying relevance 
+
+We will use our best performing tuned models, which were `bdanko/clip-flickr30k-partial-finetune` and `bdanko/blip-flickr30k-partial-finetune`, and compare qualitative results against the baseline.
 
 | Query | Rank | Image ID | BLIP Caption | Relevance (1–5) | Explanation |
 | --- | --- | --- | --- | --- | --- |
