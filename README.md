@@ -236,6 +236,9 @@ Using Low-Rank Adaptation freezes the entire model and injects tiny, trainable a
 | Dropout | 0.1 |
 | Bias | None |
 
+<img width="846" height="470" alt="image" src="https://github.com/user-attachments/assets/4363394c-68f2-4cb7-9014-1c4359087cf0" />
+
+
 ### Full Fine-tune
 
 Unfreezing and continuing training for the entire model.
@@ -247,7 +250,7 @@ Unfreezing and continuing training for the entire model.
 | Optimizer | AdamW |
 | Learning rate scheduler | Linear |
 | Loss | Caption CE Loss |
-| Epochs | 1 |
+| Epochs | 2 |
 | Learning rate | 5e-6 |
 
 ### BLIP Fine-tuning Results
@@ -257,7 +260,7 @@ Unfreezing and continuing training for the entire model.
 | Baseline | 0.1975 | 0.4708 | 0.3233 | 0.9251 |
 | Linear Probe | 0.2651 | 0.3151 | 0.25 | 0.9079 |
 | Partial Fine-tune | 0.2693 | 0.3232 | 0.2647 | 0.9093 |
-| LoRA | | | | |
+| LoRA | 0.1576 | 0.3096 | 0.2692 | 0.8978 |
 | Full Fine-tune | | | | |
 
 We explain:
@@ -311,6 +314,11 @@ We will design a full orchestrated system where:
 ### BLIP LoRA Training
 
 <img width="606" height="275" alt="image" src="https://github.com/user-attachments/assets/f4d870f9-f6cd-464f-8e3e-e3c6e4175348" />
+
+### BLIP Full Fine Tuning
+
+<img width="650" height="222" alt="image" src="https://github.com/user-attachments/assets/71bbeb7d-0b21-4340-9706-0e457e69c6f1" />
+
 
 
 
