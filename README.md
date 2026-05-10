@@ -220,6 +220,8 @@ We freeze the early layers and only unfreezes the last few layers of the network
 
 ### LoRA
 
+The model is available at [bdanko/blip-flickr30k-lora-finetune](https://huggingface.co/bdanko/blip-flickr30k-lora-finetune)
+
 Using Low-Rank Adaptation freezes the entire model and injects tiny, trainable adapter matrices into the attention layers. This allows training a much tinier subset of parameters and reaches similar performance to a full fine tune quickly.
 
 | Hyperparameter | Value |
@@ -240,6 +242,8 @@ Using Low-Rank Adaptation freezes the entire model and injects tiny, trainable a
 
 
 ### Full Fine-tune
+
+The full fine tuned model is available on Huggingface, at [bdanko/blip-flickr30k-full-finetune](https://huggingface.co/bdanko/blip-flickr30k-full-finetune)
 
 Unfreezing and continuing training for the entire model.
 
