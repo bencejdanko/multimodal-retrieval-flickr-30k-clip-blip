@@ -179,8 +179,8 @@ Our epoch loss converges, but definitely not to the same degree as the other str
 
 | Method | Recall@1 | Recall@5 | MRR | Observation |
 | --- | --- | --- | --- | --- |
-| Baseline | 21.77% | 41.60% | 0.3155 | Qualitatively, the model performs decently. However, these scores indicate that the model cannot recall precisely the same image from Flickr30k, only 1/5th of the time. When we give 5 recall allowance, it's 2/5. $0.33$ MRR indicates that we average the correct image every 3rd rank. The dataset is slightly noisy, with some captions being ambiguous and up to interpretation, and some being descriptive, but not matching the caption, which would also cause some level of error. |
-| Linear Probe | 39.92 | 70.56 | 0.5368 | We see a dramatic gain in metric results. The computation is cheap, as we can afford to freeze most of the model and only train the head. However, the improvement potential is not as great as the other models due to most of the important weights in CLIP not being learnable. |
+| Baseline | 58.68% | 83.44% | 0.6965 | Qualitatively, the model performs decently. However, these scores indicate that the model cannot recall precisely the same image from Flickr30k, only 1/5th of the time. When we give 5 recall allowance, it's 2/5. $0.33$ MRR indicates that we average the correct image every 3rd rank. The dataset is slightly noisy, with some captions being ambiguous and up to interpretation, and some being descriptive, but not matching the caption, which would also cause some level of error. |
+| Linear Probe | 39.92 | 70.56 | 0.5368 | We see a dramatic deterioration of results. Attaching a fresh, randomly initialized head likely removed far too much learned knowledge from the original CLIP, and though we trained from scratch on Flickr30K, results were significantly worse then the baseline. |
 | Partial Fine-tune | 72.48 | 92.0 | 0.8101 | One of the top performing strategies. Our unfrozen layers we were training (projection, logit scaling, final encoder layers) were highly learnable for our dataset. |
 | LoRA | 72.04 | 92.16 | 0.8089 | This approach was also highly learnable, and reached the same performance as a partial fine tune, though we were required to use smaller batches because we needed to calculate fradients at all the injected layers. |
 | Full Fine-tune | 66.66 | 89.58 | 0.7677 | Over the same computational time, full fine tuning did not reach the same performance as a partial fine or LoRA adaptation, though it did not complete its convergence. It's likely that with more training it would reach the same performance, though likely not much better. |
@@ -297,13 +297,13 @@ We will design a full orchestrated system where:
 
 We will use our best performing tuned models, which were `bdanko/clip-flickr30k-partial-finetune` and `bdanko/blip-flickr30k-partial-finetune`, and compare qualitative results against the baseline.
 
-| Query | Rank | Image ID | BLIP Caption | Relevance (1–5) | Explanation |
-| --- | --- | --- | --- | --- | --- |
-| A child playing with a dog in a park | | | | | |
-| A person cooking food in a kitchen | | | | | |
-| A group of people hiking in the mountains | | | | | |
-| A street scene with cars and pedestrians at night | | | | | |
-| A person working on a laptop in a coffee shop | | | | | |
+| Query                                             |   Rank |   Image ID | BLIP Caption                                              | Relevance (1–5)   | Explanation   |
+|:--------------------------------------------------|-------:|-----------:|:----------------------------------------------------------|:------------------|:--------------|
+| A child playing with a dog in a park              |      1 |        956 | a woman in a red shirt is laying on the grass.            |                   |               |
+| A person cooking food in a kitchen                |      1 |        858 | a man in a black shirt is cooking food.                   |                   |               |
+| A group of people hiking in the mountains         |      1 |        745 | two people are walking down a dirt road.                  |                   |               |
+| A street scene with cars and pedestrians at night |      1 |         50 | a man in a gray shirt is standing on a sidewalk.          |                   |               |
+| A person working on a laptop in a coffee shop     |      1 |        592 | a man and a woman are sitting at a table in a restaurant. |                   |               |
 
 ## Artifacts
 
