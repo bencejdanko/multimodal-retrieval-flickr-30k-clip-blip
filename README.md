@@ -253,6 +253,9 @@ Unfreezing and continuing training for the entire model.
 | Epochs | 2 |
 | Learning rate | 5e-6 |
 
+<img width="846" height="470" alt="image" src="https://github.com/user-attachments/assets/f39c8047-2a33-4901-9049-9a1082e58a31" />
+
+
 ### BLIP Fine-tuning Results
 
 | Method | BLEU-4  | ROUGE-L | METEOR | BERTScore |
@@ -261,7 +264,7 @@ Unfreezing and continuing training for the entire model.
 | Linear Probe | 0.2651 | 0.3151 | 0.25 | 0.9079 |
 | Partial Fine-tune | 0.2693 | 0.3232 | 0.2647 | 0.9093 |
 | LoRA | 0.1576 | 0.3096 | 0.2692 | 0.8978 |
-| Full Fine-tune | | | | |
+| Full Fine-tune | 0.2371 | 0.3122 | 0.217 | 0.9035 |
 
 We explain:
 
@@ -318,7 +321,6 @@ We will design a full orchestrated system where:
 ### BLIP Full Fine Tuning
 
 <img width="650" height="222" alt="image" src="https://github.com/user-attachments/assets/71bbeb7d-0b21-4340-9706-0e457e69c6f1" />
-
 
 
 
