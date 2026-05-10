@@ -298,12 +298,14 @@ We will design a full orchestrated system where:
 We will use our best performing tuned models, which were `bdanko/clip-flickr30k-partial-finetune` and `bdanko/blip-flickr30k-partial-finetune`, and compare qualitative results against the baseline.
 
 | Query                                             |   Rank |   Image ID | BLIP Caption                                              | Relevance (1–5)   | Explanation   |
-|:--------------------------------------------------|-------:|-----------:|:----------------------------------------------------------|:------------------|:--------------|
-| A child playing with a dog in a park              |      1 |        956 | a woman in a red shirt is laying on the grass.            |                   |               |
-| A person cooking food in a kitchen                |      1 |        858 | a man in a black shirt is cooking food.                   |                   |               |
-| A group of people hiking in the mountains         |      1 |        745 | two people are walking down a dirt road.                  |                   |               |
-| A street scene with cars and pedestrians at night |      1 |         50 | a man in a gray shirt is standing on a sidewalk.          |                   |               |
-| A person working on a laptop in a coffee shop     |      1 |        592 | a man and a woman are sitting at a table in a restaurant. |                   |               |
+|:--------------------------------------------------|-------:|-----------:|:----------------------------------------------------------|:------------------|:--------------| 
+| A child playing with a dog in a park              |      1 |        956 <img width="510" height="414" alt="image" src="https://github.com/user-attachments/assets/abfcf357-733c-4f04-a58c-cd988ac35d2f" /> | a woman in a red shirt is laying on the grass.            |                2   |         The CLIP retrieves neither a child nor dog. The BLIP caption omits mentioning the man ontop the woman or the location.      |
+| A person cooking food in a kitchen                |      1 |        858 <img width="481" height="527" alt="image" src="https://github.com/user-attachments/assets/9334596a-8462-4350-800d-ed73d34e7bad" /> | a man in a black shirt is cooking food.                   |              5     |        Accurate and descriptive of the person.      |
+| A group of people hiking in the mountains         |      1 |        745 <img width="429" height="548" alt="image" src="https://github.com/user-attachments/assets/e7d0472a-d1f2-4d92-a8e8-11ed3a041e72" /> | two people are walking down a dirt road.                  |              3     |       CLIP retrieval is accurate, but the BLIP caption miscounts people (there are three, not two people), and the mountain terrain.     |
+| A street scene with cars and pedestrians at night |      1 |         50  <img width="528" height="375" alt="image" src="https://github.com/user-attachments/assets/23a71a57-5d1c-4324-8478-07eefe13e7f9" /> | a man in a gray shirt is standing on a sidewalk.          |              1     |        The retreival has no cars, it is not night, and the BLIP caption only describes one particular image subject, not the larger context (street scene, multiple people)      |
+| A person working on a laptop in a coffee shop     |      1 |        592 <img width="515" height="396" alt="image" src="https://github.com/user-attachments/assets/a7ffc1e7-2e80-434c-b54b-47823c121dec" /> | a man and a woman are sitting at a table in a restaurant. |               2    |        No laptops in the scene as requested from the CLIP retrieval. The BLIP caption omits the main two subjects, the two men at the table, and refers to the woman in the background.      |
+
+Overall, the system performance is still particularly lacking on these manual queries, with inaccurate retrievals and captioning persisting. Though we attempted several fine tuned models there is still large room for improvement.
 
 ## Artifacts
 
